@@ -19,6 +19,7 @@ import com.example.finalproject.utils.FirebaseAuthHelper;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,7 +98,7 @@ public class InvoiceFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        QueryDocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
+                        DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
                         Invoice invoice = document.toObject(Invoice.class);
                         if (invoice != null) {
                             displayInvoice(invoice);

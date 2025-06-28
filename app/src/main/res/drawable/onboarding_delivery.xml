@@ -1,1 +1,22 @@
- 
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200"
+    android:tint="@color/purple_500">
+  <path
+      android:fillColor="@color/purple_500"
+      android:pathData="M30,120h20v20h-20z"/>
+  <path
+      android:fillColor="@color/purple_500"
+      android:pathData="M150,120h20v20h-20z"/>
+  <path
+      android:fillColor="@color/purple_500"
+      android:pathData="M40,110h120v30h-120z"/>
+  <path
+      android:fillColor="@color/purple_500"
+      android:pathData="M60,90h80v30h-80z"/>
+  <path
+      android:fillColor="@color/purple_500"
+      android:pathData="M140,70h20v50h-20z"/>
+</vector> 
