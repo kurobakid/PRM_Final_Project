@@ -24,8 +24,8 @@ public class OrdersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_orders, container, false);
-        recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
+        View view = inflater.inflate(R.layout.fragment_invoice, container, false);
+        recyclerViewOrders = new RecyclerView(getContext());
 
         // Mock data
         orders.add(new Order("#1001", "Delivered", "2024-06-01", 1999.99));

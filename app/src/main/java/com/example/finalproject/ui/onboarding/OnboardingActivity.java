@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.finalproject.R;
 import com.example.finalproject.ui.auth.LoginActivity;
+import com.example.finalproject.adapter.OnboardingAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
