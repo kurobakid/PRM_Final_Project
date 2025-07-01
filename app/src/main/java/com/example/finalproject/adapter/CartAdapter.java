@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -22,7 +23,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public CartAdapter(List<Product> cartItems, OnCartChangeListener listener) {
-        this.cartItems = cartItems;
+        this.cartItems = cartItems != null ? cartItems : new ArrayList<>();
         this.listener = listener;
     }
 
@@ -35,12 +36,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-        holder.bind(cartItems.get(position), position);
+        if (cartItems != null && position < cartItems.size()) {
+            holder.bind(cartItems.get(position), position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return cartItems.size();
+        return cartItems != null ? cartItems.size() : 0;
     }
 
     class CartViewHolder extends RecyclerView.ViewHolder {
@@ -71,19 +74,25 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             buttonIncrease.setOnClickListener(v -> {
                 quantity++;
                 textViewQuantity.setText(String.valueOf(quantity));
-                listener.onQuantityChanged();
+                if (listener != null) {
+                    listener.onQuantityChanged();
+                }
             });
 
             buttonDecrease.setOnClickListener(v -> {
                 if (quantity > 1) {
                     quantity--;
                     textViewQuantity.setText(String.valueOf(quantity));
-                    listener.onQuantityChanged();
+                    if (listener != null) {
+                        listener.onQuantityChanged();
+                    }
                 }
             });
 
             buttonRemove.setOnClickListener(v -> {
-                listener.onItemRemoved(position);
+                if (listener != null) {
+                    listener.onItemRemoved(position);
+                }
             });
         }
     }
