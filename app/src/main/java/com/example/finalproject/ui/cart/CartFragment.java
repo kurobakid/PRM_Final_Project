@@ -1,19 +1,25 @@
 package com.example.finalproject.ui.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.ui.payment.ConfirmActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,8 @@ public class CartFragment extends Fragment {
     private Button buttonCheckout;
     private CartAdapter cartAdapter;
     private List<Product> cartItems = new ArrayList<>();
+
+    private double totalAmount = 0.0;
 
     @Nullable
     @Override
@@ -52,8 +60,21 @@ public class CartFragment extends Fragment {
         recyclerViewCart.setAdapter(cartAdapter);
         updateTotal();
 
-        buttonCheckout.setOnClickListener(v -> {
-            // TODO: Navigate to checkout screen
+        buttonCheckout.setOnClickListener(new View.OnClickListener() {
+            // TODO: Navigate to confirm screen
+            @Override
+            public void onClick(View v) {
+                if(cartItems.isEmpty()) {
+                    Toast.makeText(getActivity(), "Your cart is empty. Please add items to proceed.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Proceed to confirm logic
+                    // For now, just show a message
+                    Intent intent = new Intent(getActivity(), ConfirmActivity.class);
+                    intent.putExtra("total", totalAmount);
+                    intent.putExtra("cartItems", new ArrayList<>(cartItems));
+                    startActivity(intent);
+                }
+            }
         });
 
         return view;
@@ -64,6 +85,7 @@ public class CartFragment extends Fragment {
         for (Product product : cartItems) {
             total += product.getPrice(); // For now, quantity is always 1
         }
+        totalAmount = total;
         textViewTotal.setText(String.format("Total: $%.2f", total));
     }
 } 
