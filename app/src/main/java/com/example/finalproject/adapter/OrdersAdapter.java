@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Order;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
     private List<Order> orders;
@@ -55,9 +57,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         }
 
         public void bind(Order order) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
             textViewOrderId.setText(order.getOrderId());
             textViewOrderStatus.setText(order.getStatus());
-            textViewOrderDate.setText(order.getDate());
+            textViewOrderDate.setText(sdf.format(order.getDate()));
             textViewOrderTotal.setText(String.format("$%.2f", order.getTotal()));
             buttonViewDetails.setOnClickListener(v -> {
                 if (listener != null) listener.onOrderClick(order);

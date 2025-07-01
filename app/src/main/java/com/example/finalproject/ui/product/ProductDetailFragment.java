@@ -21,8 +21,11 @@ import com.example.finalproject.adapter.ReviewAdapter;
 import com.example.finalproject.model.Banner;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Review;
+import com.example.finalproject.utils.FirebaseRepository;
 import java.util.ArrayList;
 import java.util.List;
+import androidx.navigation.Navigation;
+import androidx.appcompat.app.AlertDialog;
 
 public class ProductDetailFragment extends Fragment {
     private ViewPager2 viewPagerImages;
@@ -33,6 +36,7 @@ public class ProductDetailFragment extends Fragment {
     private RecyclerView recyclerViewReviews;
     private BannerAdapter imageAdapter;
     private ReviewAdapter reviewAdapter;
+    private FirebaseRepository repository;
 
     @Nullable
     @Override
@@ -68,8 +72,28 @@ public class ProductDetailFragment extends Fragment {
         imageViewWishlist.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Added to wishlist!", Toast.LENGTH_SHORT).show();
         });
+        repository = new FirebaseRepository();
         buttonAddToCart.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
+            repository.addToCart(product, new FirebaseRepository.DataCallback<Void>() {
+                @Override
+                public void onSuccess(List<Void> data) {
+                    new AlertDialog.Builder(requireContext())
+                        .setTitle("Added to Cart")
+                        .setMessage("Product added to cart. Go to checkout?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            Navigation.findNavController(requireView())
+                                .navigate(R.id.action_productDetailFragment_to_cartFragment);
+                        })
+                        .setNegativeButton("No", (dialog, which) -> {
+                            Toast.makeText(getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
+                        })
+                        .show();
+                }
+                @Override
+                public void onFailure(String error) {
+                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
         buttonBuyNow.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Proceed to buy!", Toast.LENGTH_SHORT).show();

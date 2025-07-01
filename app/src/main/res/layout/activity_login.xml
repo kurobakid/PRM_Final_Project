@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email or Phone"
-        android:inputType="text" />
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -43,4 +43,17 @@
         android:text="Don't have an account? Sign Up"
         android:textColor="@color/purple_500"
         android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textAdminLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Login"
+        android:textColor="@color/purple_700"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"/>
 </LinearLayout> 

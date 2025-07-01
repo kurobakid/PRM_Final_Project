@@ -39,4 +39,7 @@ public class InvoiceItem {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    // Compatibility method
+    public double getPrice() { return unitPrice; }
 } 

@@ -4,6 +4,11 @@ public class Category {
     private String id;
     private String name;
     private int iconResource;
+    private String iconResourceName;
+
+    // Default constructor required for Firebase
+    public Category() {
+    }
 
     public Category(String name, int iconResource) {
         this.name = name;
@@ -25,4 +30,7 @@ public class Category {
 
     public int getIconResource() { return iconResource; }
     public void setIconResource(int iconResource) { this.iconResource = iconResource; }
+
+    public String getIconResourceName() { return iconResourceName; }
+    public void setIconResourceName(String iconResourceName) { this.iconResourceName = iconResourceName; }
 } 
