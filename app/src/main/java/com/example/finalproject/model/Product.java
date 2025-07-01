@@ -9,6 +9,13 @@ public class Product {
     private int imageResource;
     private String description;
     private int stockQuantity;
+    private String imageUrl;
+    private int quantity;
+    private String cartDocId;
+
+    public Product() {
+        // Default constructor required for calls to DataSnapshot.getValue(Product.class)
+    }
 
     public Product(String name, String brand, double price, double rating, int imageResource) {
         this.name = name;
@@ -54,7 +61,16 @@ public class Product {
     public int getStockQuantity() { return stockQuantity; }
     public void setStockQuantity(int stockQuantity) { this.stockQuantity = stockQuantity; }
 
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
     public String getFormattedPrice() {
         return String.format("$%.2f", price);
     }
+
+    public String getCartDocId() { return cartDocId; }
+    public void setCartDocId(String cartDocId) { this.cartDocId = cartDocId; }
 } 

@@ -17,6 +17,15 @@ public class Notification {
         // Required empty constructor for Firebase
     }
 
+    public Notification(String id, String title, String message, String type, Date timestamp, boolean isRead) {
+        this.id = id;
+        this.title = title;
+        this.message = message;
+        this.type = type;
+        this.timestamp = timestamp;
+        this.isRead = isRead;
+    }
+
     public Notification(String id, String userId, String title, String message, 
                        String type, boolean isRead, Date timestamp, 
                        String actionUrl, String imageUrl) {
