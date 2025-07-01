@@ -54,8 +54,16 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onAddToCartClick(Product product) {
-                // TODO: Add to cart
-                Toast.makeText(getContext(), "Added to cart: " + product.getName(), Toast.LENGTH_SHORT).show();
+                repository.addToCart(product, new FirebaseRepository.DataCallback<Void>() {
+                    @Override
+                    public void onSuccess(List<Void> data) {
+                        Toast.makeText(getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override

@@ -21,6 +21,7 @@ import com.example.finalproject.model.Address;
 import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.utils.FirebaseAuthHelper;
+import com.example.finalproject.utils.FirebaseRepository;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -48,6 +49,7 @@ public class CheckoutFragment extends Fragment {
     private double subtotal = 0;
     private double tax = 0;
     private double shipping = 15.99;
+    private FirebaseRepository repository;
 
     @Nullable
     @Override
@@ -56,6 +58,7 @@ public class CheckoutFragment extends Fragment {
         
         db = FirebaseFirestore.getInstance();
         authHelper = new FirebaseAuthHelper(requireActivity());
+        repository = new FirebaseRepository();
         checkoutItems = new ArrayList<>();
         
         initViews(view);
@@ -85,13 +88,12 @@ public class CheckoutFragment extends Fragment {
     private void setupRecyclerView() {
         checkoutAdapter = new CartAdapter(checkoutItems, new CartAdapter.OnCartChangeListener() {
             @Override
-            public void onQuantityChanged() {
-                calculateTotals();
+            public void onQuantityChanged(int position, Product product, int newQuantity) {
+                updateQuantity(product, newQuantity - product.getQuantity());
             }
-            
             @Override
-            public void onItemRemoved(int position) {
-                removeItem(checkoutItems.get(position));
+            public void onItemRemoved(int position, Product product) {
+                removeItem(product);
             }
         });
         
@@ -114,29 +116,20 @@ public class CheckoutFragment extends Fragment {
     }
     
     private void loadCheckoutItems() {
-        // For demo purposes, create sample checkout items
-        // In a real app, these would come from the cart
-        checkoutItems.clear();
-        
-        Product product1 = new Product();
-        product1.setId("1");
-        product1.setName("iPhone 15 Pro");
-        product1.setPrice(999.99);
-        product1.setImageUrl("https://example.com/iphone.jpg");
-        product1.setQuantity(1);
-        
-        Product product2 = new Product();
-        product2.setId("2");
-        product2.setName("Samsung Galaxy S24");
-        product2.setPrice(899.99);
-        product2.setImageUrl("https://example.com/samsung.jpg");
-        product2.setQuantity(1);
-        
-        checkoutItems.add(product1);
-        checkoutItems.add(product2);
-        
-        checkoutAdapter.notifyDataSetChanged();
-        calculateTotals();
+        // Load real cart items from Firestore
+        repository.loadUserCart(new FirebaseRepository.DataCallback<Product>() {
+            @Override
+            public void onSuccess(List<Product> data) {
+                checkoutItems.clear();
+                checkoutItems.addAll(data);
+                checkoutAdapter.notifyDataSetChanged();
+                calculateTotals();
+            }
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(getContext(), "Failed to load cart for checkout", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     
     private void loadUserAddresses() {

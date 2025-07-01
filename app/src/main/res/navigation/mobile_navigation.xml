@@ -175,4 +175,8 @@
         android:id="@+id/action_ordersFragment_to_invoiceFragment"
         app:destination="@id/nav_invoice" />
 
+    <action
+        android:id="@+id/action_productDetailFragment_to_cartFragment"
+        app:destination="@id/nav_cart" />
+
 </navigation>

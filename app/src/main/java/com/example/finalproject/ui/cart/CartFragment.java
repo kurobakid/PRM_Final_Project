@@ -50,17 +50,39 @@ public class CartFragment extends Fragment {
     private void setupRecyclerView() {
         cartAdapter = new CartAdapter(cartItems, new CartAdapter.OnCartChangeListener() {
             @Override
-            public void onQuantityChanged() {
-                updateTotal();
+            public void onQuantityChanged(int position, Product product, int newQuantity) {
+                if (product.getCartDocId() != null) {
+                    repository.updateCartItemQuantity(product.getCartDocId(), newQuantity, new FirebaseRepository.DataCallback<Void>() {
+                        @Override
+                        public void onSuccess(List<Void> data) {
+                            updateTotal();
+                        }
+                        @Override
+                        public void onFailure(String error) {
+                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
-            
             @Override
-            public void onItemRemoved(int position) {
-                if (position >= 0 && position < cartItems.size()) {
-                    cartItems.remove(position);
-                    cartAdapter.notifyItemRemoved(position);
-                    updateTotal();
-                    updateEmptyCartVisibility();
+            public void onItemRemoved(int position, Product product) {
+                if (product.getCartDocId() != null) {
+                    repository.deleteCartItem(product.getCartDocId(), new FirebaseRepository.DataCallback<Void>() {
+                        @Override
+                        public void onSuccess(List<Void> data) {
+                            if (position >= 0 && position < cartItems.size()) {
+                                cartItems.remove(position);
+                                cartAdapter.notifyItemRemoved(position);
+                                updateTotal();
+                                updateEmptyCartVisibility();
+                                Toast.makeText(getContext(), "Item removed from cart", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(String error) {
+                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });

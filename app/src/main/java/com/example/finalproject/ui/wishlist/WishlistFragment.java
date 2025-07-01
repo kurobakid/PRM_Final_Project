@@ -45,8 +45,16 @@ public class WishlistFragment extends Fragment {
         wishlistAdapter = new WishlistAdapter(wishlistItems, new WishlistAdapter.OnWishlistActionListener() {
             @Override
             public void onAddToCart(Product product) {
-                // TODO: Add to cart functionality
-                Toast.makeText(getContext(), "Added to cart: " + product.getName(), Toast.LENGTH_SHORT).show();
+                repository.addToCart(product, new FirebaseRepository.DataCallback<Void>() {
+                    @Override
+                    public void onSuccess(List<Void> data) {
+                        Toast.makeText(getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
