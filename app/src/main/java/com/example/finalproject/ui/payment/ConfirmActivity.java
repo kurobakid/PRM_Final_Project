@@ -15,16 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.ConfirmAdapter;
+import com.example.finalproject.model.Address;
+import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.ui.orders.OrdersFragment;
 import com.example.finalproject.ui.payment.zalo.Api.CreateOrder;
+import com.example.finalproject.utils.FirebaseRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import vn.zalopay.sdk.Environment;
@@ -42,11 +48,25 @@ public class ConfirmActivity extends AppCompatActivity {
     private Double totalDBVND;
     private String totalST;
     private String totalSTVND;
+    private FirebaseRepository repo = new FirebaseRepository();
+
+    private FirebaseAuth auth;
+    private Address shipAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
+        repo.getUserAddress(new FirebaseRepository.SingleDataCallback<Address>() {
+            @Override
+            public void onSuccess(Address address) {
+                shipAddress = address;
+            }
+            @Override
+            public void onFailure(String error) {
+                // Handle error
+            }
+        });
 
         recyclerViewConfirm = findViewById(R.id.recyclerViewConfirm);
         textViewTotal = findViewById(R.id.textViewTotal);
@@ -84,18 +104,155 @@ public class ConfirmActivity extends AppCompatActivity {
                         ZaloPaySDK.getInstance().payOrder(ConfirmActivity.this, token, "demozpdk://app", new PayOrderListener() {
                             @Override
                             public void onPaymentSucceeded(String s, String s1, String s2) {
-                                Intent intent = new Intent(ConfirmActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                Order order = new Order();
+                                List<Map<String, Object>> orderItems = new ArrayList<>();
+                                for (Product product : cartItems) {
+                                    Map<String, Object> itemMap = new HashMap<>();
+                                    itemMap.put("id", product.getId());
+                                    itemMap.put("name", product.getName());
+                                    itemMap.put("brand", product.getBrand());
+                                    itemMap.put("price", product.getPrice());
+                                    itemMap.put("quantity", product.getQuantity());
+                                    itemMap.put("imageUrl", product.getImageUrl());
+                                    itemMap.put("cartDocId", product.getCartDocId());
+                                    itemMap.put("description", product.getDescription());
+                                    itemMap.put("stockQuantity", product.getStockQuantity());
+                                    itemMap.put("rating", product.getRating());
+                                    itemMap.put("imageResource", product.getImageResource());
+                                    orderItems.add(itemMap);
+                                }
+                                order.setItems(orderItems);
+                                order.setStatus("Paid");
+                                order.setTotal(totalDBVND);
+                                order.setStatus("Success");
+                                order.setPaymentMethod("ZaloPay");
+                                order.setShipping(100000.0);
+                                order.setSubtotal(totalDB);
+                                order.setTax(0.0);
+                                order.setShippingAddress(shipAddress);
+                                repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String orderId) {
+                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void data) {
+                                                Intent intent = new Intent(ConfirmActivity.this, OrdersFragment.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                            @Override
+                                            public void onFailure(String error) {
+                                                // Handle error
+                                            }
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailure(String error) {
+                                        // Handle error
+                                    }
+                                });
                             }
 
                             @Override
                             public void onPaymentCanceled(String s, String s1) {
-
+                                Order order = new Order();
+                                List<Map<String, Object>> orderItems = new ArrayList<>();
+                                for (Product product : cartItems) {
+                                    Map<String, Object> itemMap = new HashMap<>();
+                                    itemMap.put("id", product.getId());
+                                    itemMap.put("name", product.getName());
+                                    itemMap.put("brand", product.getBrand());
+                                    itemMap.put("price", product.getPrice());
+                                    itemMap.put("quantity", product.getQuantity());
+                                    itemMap.put("imageUrl", product.getImageUrl());
+                                    itemMap.put("cartDocId", product.getCartDocId());
+                                    itemMap.put("description", product.getDescription());
+                                    itemMap.put("stockQuantity", product.getStockQuantity());
+                                    itemMap.put("rating", product.getRating());
+                                    itemMap.put("imageResource", product.getImageResource());
+                                    orderItems.add(itemMap);
+                                }
+                                order.setItems(orderItems);
+                                order.setStatus("Paid");
+                                order.setTotal(totalDBVND);
+                                order.setStatus("Canceled");
+                                order.setPaymentMethod("ZaloPay");
+                                order.setShipping(100000.0);
+                                order.setSubtotal(totalDB);
+                                order.setTax(0.0);
+                                order.setShippingAddress(shipAddress);
+                                repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String orderId) {
+                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void data) {
+                                                Intent intent = new Intent(ConfirmActivity.this, OrdersFragment.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                            @Override
+                                            public void onFailure(String error) {
+                                                // Handle error
+                                            }
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailure(String error) {
+                                        // Handle error
+                                    }
+                                });
                             }
 
                             @Override
                             public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
-
+                                Order order = new Order();
+                                List<Map<String, Object>> orderItems = new ArrayList<>();
+                                for (Product product : cartItems) {
+                                    Map<String, Object> itemMap = new HashMap<>();
+                                    itemMap.put("id", product.getId());
+                                    itemMap.put("name", product.getName());
+                                    itemMap.put("brand", product.getBrand());
+                                    itemMap.put("price", product.getPrice());
+                                    itemMap.put("quantity", product.getQuantity());
+                                    itemMap.put("imageUrl", product.getImageUrl());
+                                    itemMap.put("cartDocId", product.getCartDocId());
+                                    itemMap.put("description", product.getDescription());
+                                    itemMap.put("stockQuantity", product.getStockQuantity());
+                                    itemMap.put("rating", product.getRating());
+                                    itemMap.put("imageResource", product.getImageResource());
+                                    orderItems.add(itemMap);
+                                }
+                                order.setItems(orderItems);
+                                order.setStatus("Paid");
+                                order.setTotal(totalDBVND);
+                                order.setStatus("Error");
+                                order.setPaymentMethod("ZaloPay");
+                                order.setShipping(100000.0);
+                                order.setSubtotal(totalDB);
+                                order.setTax(0.0);
+                                order.setShippingAddress(shipAddress);
+                                repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String orderId) {
+                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void data) {
+                                                Intent intent = new Intent(ConfirmActivity.this, OrdersFragment.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                            @Override
+                                            public void onFailure(String error) {
+                                                // Handle error
+                                            }
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailure(String error) {
+                                        // Handle error
+                                    }
+                                });
                             }
                         });
                     }

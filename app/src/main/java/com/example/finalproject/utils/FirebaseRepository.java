@@ -1,6 +1,8 @@
 package com.example.finalproject.utils;
 
 import android.util.Log;
+
+import com.example.finalproject.model.Address;
 import com.example.finalproject.model.Banner;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
@@ -12,6 +14,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -386,5 +389,54 @@ public class FirebaseRepository {
             .delete()
             .addOnSuccessListener(aVoid -> callback.onSuccess(null))
             .addOnFailureListener(e -> callback.onFailure("Failed to delete cart item: " + e.getMessage()));
+    }
+    public void createOrder(Order order, SingleDataCallback<String> callback) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            callback.onFailure("User not authenticated");
+            return;
+        }
+        order.setUserId(currentUser.getUid());
+        order.setDate(new Date()); // Set current date
+        db.collection("orders")
+                .add(order)
+                .addOnSuccessListener(documentReference -> callback.onSuccess(documentReference.getId()))
+                .addOnFailureListener(e -> callback.onFailure("Failed to create order: " + e.getMessage()));
+    }
+    public void clearUserCart(SingleDataCallback<Void> callback) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            callback.onFailure("User not authenticated");
+            return;
+        }
+        db.collection("cart")
+                .whereEqualTo("userId", currentUser.getUid())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        doc.getReference().delete();
+                    }
+                    callback.onSuccess(null);
+                })
+                .addOnFailureListener(e -> callback.onFailure("Failed to clear cart: " + e.getMessage()));
+    }
+    public void getUserAddress(SingleDataCallback<Address> callback) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            callback.onFailure("User not authenticated");
+            return;
+        }
+        db.collection("addresses")
+                .document(currentUser.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Address address = documentSnapshot.toObject(Address.class);
+                        callback.onSuccess(address);
+                    } else {
+                        callback.onFailure("Address not found");
+                    }
+                })
+                .addOnFailureListener(e -> callback.onFailure("Failed to get address: " + e.getMessage()));
     }
 } 
