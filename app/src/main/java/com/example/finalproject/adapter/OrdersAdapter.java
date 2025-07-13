@@ -5,15 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.finalproject.R;
 import com.example.finalproject.model.Order;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
+
     private List<Order> orders;
     private OnOrderClickListener listener;
 
@@ -62,9 +66,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             textViewOrderStatus.setText(order.getStatus());
             textViewOrderDate.setText(sdf.format(order.getDate()));
             textViewOrderTotal.setText(String.format("$%.2f", order.getTotal()));
+
             buttonViewDetails.setOnClickListener(v -> {
                 if (listener != null) listener.onOrderClick(order);
             });
         }
     }
-} 
+}

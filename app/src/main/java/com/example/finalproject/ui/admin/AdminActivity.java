@@ -1,67 +1,40 @@
 package com.example.finalproject.ui.admin;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.example.finalproject.R;
-import com.example.finalproject.utils.FirebaseDataInitializer;
 
 public class AdminActivity extends AppCompatActivity {
-    private Button buttonInitializeData;
-    private Button buttonClearData;
-    private TextView textViewStatus;
-    private FirebaseDataInitializer dataInitializer;
+
+    private Button btnProducts, btnCategories, btnPayments, btnUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin);
+        setContentView(R.layout.activity_admin); // Layout mới
 
-        dataInitializer = new FirebaseDataInitializer();
-        
-        buttonInitializeData = findViewById(R.id.buttonInitializeData);
-        buttonClearData = findViewById(R.id.buttonClearData);
-        textViewStatus = findViewById(R.id.textViewStatus);
+        // Sidebar buttons
+        btnProducts = findViewById(R.id.buttonMenuProducts);
+        btnCategories = findViewById(R.id.buttonMenuCategories);
+        btnPayments = findViewById(R.id.buttonMenuPayments);
+        btnUsers = findViewById(R.id.buttonMenuUsers);
 
-        buttonInitializeData.setOnClickListener(v -> {
-            initializeSampleData();
-        });
+        // Load default fragment
+        replaceFragment(new ProductsFragment());
 
-        buttonClearData.setOnClickListener(v -> {
-            clearAllData();
-        });
+        // Button listeners
+        btnProducts.setOnClickListener(v -> replaceFragment(new ProductsFragment()));
+        // btnCategories.setOnClickListener(v -> replaceFragment(new CategoriesFragment()));
+         btnPayments.setOnClickListener(v -> replaceFragment(new PaymentsFragment()));
+        // btnUsers.setOnClickListener(v -> replaceFragment(new UsersFragment()));
     }
 
-    private void initializeSampleData() {
-        buttonInitializeData.setEnabled(false);
-        textViewStatus.setText("Initializing sample data...");
-        
-        dataInitializer.initializeSampleDataIfNeeded();
-        
-        Toast.makeText(this, "Sample data initialization started. Check logs for progress.", Toast.LENGTH_LONG).show();
-        
-        // Re-enable button after a delay
-        buttonInitializeData.postDelayed(() -> {
-            buttonInitializeData.setEnabled(true);
-            textViewStatus.setText("Sample data initialization completed. Check Firebase Console.");
-        }, 3000);
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.adminContentFrame, fragment)
+                .commit();
     }
-
-    private void clearAllData() {
-        buttonClearData.setEnabled(false);
-        textViewStatus.setText("Clearing all data...");
-        
-        dataInitializer.clearAllData();
-        
-        Toast.makeText(this, "Data clearing started. Check logs for progress.", Toast.LENGTH_LONG).show();
-        
-        // Re-enable button after a delay
-        buttonClearData.postDelayed(() -> {
-            buttonClearData.setEnabled(true);
-            textViewStatus.setText("Data clearing completed. Check Firebase Console.");
-        }, 3000);
-    }
-} 
+}

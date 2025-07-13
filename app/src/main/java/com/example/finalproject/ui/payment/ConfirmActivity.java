@@ -83,7 +83,7 @@ public class ConfirmActivity extends AppCompatActivity {
         cartItems = (ArrayList<Product>) getIntent().getSerializableExtra("cartItems");
         totalDB = getIntent().getDoubleExtra("total", 0);
         totalDBVND = totalDB*rates();
-        textViewTotalVND.setText(String.format("Total: $%.2f", totalDBVND));
+        textViewTotalVND.setText(String.format("Total (VND): %.2fVND", totalDBVND));
         totalST = String.format("%.0f", totalDB);
         totalSTVND = String.format("%.0f", totalDBVND);
 

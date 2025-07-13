@@ -4,31 +4,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
+
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private List<Product> products;
-    private OnProductClickListener listener;
+public class AdminProductAdapter extends RecyclerView.Adapter<AdminProductAdapter.ProductViewHolder> {
 
-    public interface OnProductClickListener {
-        void onProductClick(Product product);
-        void onAddToCartClick(Product product);
-        void onWishlistClick(Product product);
+    private List<Product> products;
+    private OnAdminProductClickListener listener;
+
+    public interface OnAdminProductClickListener {
+        void onEditClick(Product product);
+        void onDeleteLongClick(Product product);
     }
 
-    public ProductAdapter(List<Product> products) {
+    public AdminProductAdapter(List<Product> products) {
         this.products = products;
     }
 
-    public void setOnProductClickListener(OnProductClickListener listener) {
+    public void setOnAdminProductClickListener(OnAdminProductClickListener listener) {
         this.listener = listener;
     }
 
@@ -36,7 +37,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product, parent, false);
+                .inflate(R.layout.item_admin_product, parent, false);
         return new ProductViewHolder(view);
     }
 
@@ -52,52 +53,40 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
-        private ImageView productImage, wishlistIcon, addToCartIcon;
-        private TextView productName, productBrand, productPrice;
-        private RatingBar ratingBar;
+        private ImageView productImage;
+        private TextView productName, productPrice;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             productImage = itemView.findViewById(R.id.imageViewProduct);
             productName = itemView.findViewById(R.id.textViewProductName);
-            productBrand = itemView.findViewById(R.id.textViewProductBrand);
             productPrice = itemView.findViewById(R.id.textViewProductPrice);
-            ratingBar = itemView.findViewById(R.id.ratingBarProduct);
-            wishlistIcon = itemView.findViewById(R.id.imageViewWishlist);
-            addToCartIcon = itemView.findViewById(R.id.imageViewAddToCart);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onProductClick(products.get(position));
+                    listener.onEditClick(products.get(position));
                 }
             });
 
-            wishlistIcon.setOnClickListener(v -> {
+            itemView.setOnLongClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onWishlistClick(products.get(position));
+                    listener.onDeleteLongClick(products.get(position));
+                    return true;
                 }
-            });
-
-            addToCartIcon.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onAddToCartClick(products.get(position));
-                }
+                return false;
             });
         }
 
         public void bind(Product product) {
+            productName.setText(product.getName());
+            productPrice.setText(product.getFormattedPrice());
 
             Glide.with(itemView.getContext())
                     .load(product.getImageUrl())
                     .placeholder(R.drawable.address_selection_background)
                     .into(productImage);
-            productName.setText(product.getName());
-            productBrand.setText(product.getBrand());
-            productPrice.setText(product.getFormattedPrice());
-            ratingBar.setRating((float) product.getRating());
         }
     }
 }

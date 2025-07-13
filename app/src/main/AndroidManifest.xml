@@ -82,6 +82,13 @@
             android:exported="false"
             android:label="Admin Login"
             android:theme="@style/Theme.FinalProject.NoActionBar" />
+
+        <!-- Admin CRUD Product Activity -->
+        <activity
+            android:name=".ui.admin.AddEditProductActivity"
+            android:exported="false" />
+        <activity android:name=".ui.admin.OrderDetailActivity" />
+
     </application>
 
 </manifest>

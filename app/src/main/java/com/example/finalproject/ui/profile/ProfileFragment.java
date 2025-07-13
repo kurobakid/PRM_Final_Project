@@ -47,6 +47,8 @@ public class ProfileFragment extends Fragment {
 
         buttonEditProfile.setOnClickListener(v -> {
             // TODO: Navigate to EditProfileFragment
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_profileFragment_to_editProfileFragment);
             Toast.makeText(getContext(), "Edit Profile clicked", Toast.LENGTH_SHORT).show();
         });
         
@@ -58,6 +60,8 @@ public class ProfileFragment extends Fragment {
         
         buttonChangePassword.setOnClickListener(v -> {
             // TODO: Navigate to ChangePasswordFragment
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_profileFragment_to_changePasswordFragment);
             Toast.makeText(getContext(), "Change Password clicked", Toast.LENGTH_SHORT).show();
         });
         

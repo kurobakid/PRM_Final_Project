@@ -1,9 +1,12 @@
 package com.example.finalproject.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Locale;
 
 public class Order implements Serializable {
     private String id;
@@ -22,13 +25,23 @@ public class Order implements Serializable {
 
     public Order() {
         // Default constructor for Firebase
+        this.orderId = generateOrderId(); // Auto-generate orderId
+        this.status = "Pending";
+        this.date = new Date();
+        this.total = 0.0;
+        this.subtotal = 0.0;
+        this.tax = 0.0;
+        this.shipping = 0.0;
     }
 
     public Order(String orderId, String status, String date, double total) {
-        this.orderId = orderId;
-        this.status = status;
-        this.date = new Date(); // Convert string to Date
+        this.orderId = orderId != null ? orderId : generateOrderId();
+        this.status = status != null ? status : "Pending";
+        this.date = new Date(); // Convert string to Date (ignoring input date string for simplicity)
         this.total = total;
+        this.subtotal = total; // Assuming subtotal equals total for simplicity
+        this.tax = 0.0;
+        this.shipping = 0.0;
     }
 
     // Getters and Setters
@@ -70,4 +83,13 @@ public class Order implements Serializable {
 
     public List<Map<String, Object>> getItems() { return items; }
     public void setItems(List<Map<String, Object>> items) { this.items = items; }
-} 
+
+    private String generateOrderId() {
+        // Format: ORD-YYYYMMDD-XXXX
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        String datePart = sdf.format(new Date());
+        Random random = new Random();
+        int randomPart = random.nextInt(10000); // 4-digit random number
+        return String.format("ORD-%s-%04d", datePart, randomPart);
+    }
+}

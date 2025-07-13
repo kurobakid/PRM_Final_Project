@@ -79,6 +79,18 @@
         android:label="Add/Edit Address"
         tools:layout="@layout/fragment_add_edit_address" />
 
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.finalproject.ui.profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.finalproject.ui.profile.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
+
     <!-- Settings Fragment -->
     <fragment
         android:id="@+id/nav_settings"
@@ -122,6 +134,14 @@
     <action
         android:id="@+id/action_profileFragment_to_addressBookFragment"
         app:destination="@id/nav_address_book" />
+
+    <action
+        android:id="@+id/action_profileFragment_to_editProfileFragment"
+        app:destination="@id/editProfileFragment" />
+
+    <action
+        android:id="@+id/action_profileFragment_to_changePasswordFragment"
+        app:destination="@id/changePasswordFragment" />
 
     <action
         android:id="@+id/action_profileFragment_to_settingsFragment"
