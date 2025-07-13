@@ -41,6 +41,12 @@
             android:exported="false"
             android:theme="@style/Theme.FinalProject.NoActionBar" />
         
+        <!-- Onboarding Activity -->
+        <activity
+            android:name=".ui.onboarding.OnboardingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FinalProject.NoActionBar" />
+        
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
@@ -48,6 +54,20 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.FinalProject.NoActionBar">
         </activity>
+        
+        <!-- Admin Activity -->
+        <activity
+            android:name=".ui.admin.AdminActivity"
+            android:exported="false"
+            android:label="Admin Panel"
+            android:theme="@style/Theme.FinalProject.NoActionBar" />
+            
+        <!-- Admin Login Activity -->
+        <activity
+            android:name=".ui.admin.AdminLoginActivity"
+            android:exported="false"
+            android:label="Admin Login"
+            android:theme="@style/Theme.FinalProject.NoActionBar" />
     </application>
 
 </manifest>

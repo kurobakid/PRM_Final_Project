@@ -11,12 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.example.finalproject.R;
+import com.example.finalproject.ui.admin.AdminLoginActivity;
 import com.example.finalproject.utils.FirebaseAuthHelper;
 
 public class LoginActivity extends Activity {
     private EditText emailPhoneEditText, passwordEditText;
     private Button loginButton;
-    private TextView signUpText, forgotPasswordText;
+    private TextView signUpText, forgotPasswordText, adminLoginText;
     private FirebaseAuthHelper authHelper;
 
     @Override
@@ -31,6 +32,7 @@ public class LoginActivity extends Activity {
         loginButton = findViewById(R.id.buttonLogin);
         signUpText = findViewById(R.id.textSignUp);
         forgotPasswordText = findViewById(R.id.textForgotPassword);
+        adminLoginText = findViewById(R.id.textAdminLogin);
 
         loginButton.setOnClickListener(v -> {
             String emailPhone = emailPhoneEditText.getText().toString().trim();
@@ -69,6 +71,10 @@ public class LoginActivity extends Activity {
 
         forgotPasswordText.setOnClickListener(v -> {
             startActivity(new Intent(this, ForgotPasswordActivity.class));
+        });
+
+        adminLoginText.setOnClickListener(v -> {
+            startActivity(new Intent(this, AdminLoginActivity.class));
         });
     }
 } 

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -17,12 +18,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private OnCartChangeListener listener;
 
     public interface OnCartChangeListener {
-        void onQuantityChanged();
-        void onItemRemoved(int position);
+        void onQuantityChanged(int position, Product product, int newQuantity);
+        void onItemRemoved(int position, Product product);
     }
 
     public CartAdapter(List<Product> cartItems, OnCartChangeListener listener) {
-        this.cartItems = cartItems;
+        this.cartItems = cartItems != null ? cartItems : new ArrayList<>();
         this.listener = listener;
     }
 
@@ -35,12 +36,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-        holder.bind(cartItems.get(position), position);
+        if (cartItems != null && position < cartItems.size()) {
+            holder.bind(cartItems.get(position), position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return cartItems.size();
+        return cartItems != null ? cartItems.size() : 0;
     }
 
     class CartViewHolder extends RecyclerView.ViewHolder {
@@ -66,24 +69,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             textViewName.setText(product.getName());
             textViewBrand.setText(product.getBrand());
             textViewPrice.setText(product.getFormattedPrice());
+            quantity = product.getQuantity();
             textViewQuantity.setText(String.valueOf(quantity));
 
             buttonIncrease.setOnClickListener(v -> {
                 quantity++;
                 textViewQuantity.setText(String.valueOf(quantity));
-                listener.onQuantityChanged();
+                product.setQuantity(quantity);
+                if (listener != null) {
+                    listener.onQuantityChanged(position, product, quantity);
+                }
             });
 
             buttonDecrease.setOnClickListener(v -> {
                 if (quantity > 1) {
                     quantity--;
                     textViewQuantity.setText(String.valueOf(quantity));
-                    listener.onQuantityChanged();
+                    product.setQuantity(quantity);
+                    if (listener != null) {
+                        listener.onQuantityChanged(position, product, quantity);
+                    }
                 }
             });
 
             buttonRemove.setOnClickListener(v -> {
-                listener.onItemRemoved(position);
+                if (listener != null) {
+                    listener.onItemRemoved(position, product);
+                }
             });
         }
     }

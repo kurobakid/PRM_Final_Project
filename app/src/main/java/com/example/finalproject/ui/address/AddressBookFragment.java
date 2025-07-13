@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.R;
@@ -45,8 +46,11 @@ public class AddressBookFragment extends Fragment {
         loadAddresses();
         
         fabAddAddress.setOnClickListener(v -> {
-            // TODO: Navigate to AddAddressFragment
-            Toast.makeText(getContext(), "Add Address clicked", Toast.LENGTH_SHORT).show();
+            // Navigate to AddEditAddressFragment for new address
+            Bundle bundle = new Bundle();
+            // No address passed means we're adding a new one
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_addressBookFragment_to_addEditAddressFragment, bundle);
         });
         
         return view;
@@ -58,7 +62,10 @@ public class AddressBookFragment extends Fragment {
             Toast.makeText(getContext(), "Selected: " + address.getFullName(), Toast.LENGTH_SHORT).show();
         }, address -> {
             // Handle address edit
-            Toast.makeText(getContext(), "Edit: " + address.getFullName(), Toast.LENGTH_SHORT).show();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("address", address);
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_addressBookFragment_to_addEditAddressFragment, bundle);
         }, address -> {
             // Handle address delete
             deleteAddress(address);

@@ -1,11 +1,13 @@
 package com.example.finalproject.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Invoice {
+public class Invoice implements Serializable {
     private String id;
     private String orderId;
+    private String invoiceNumber;
     private Date invoiceDate;
     private Date dueDate;
     private String billingAddress;
@@ -24,6 +26,8 @@ public class Invoice {
     public void setId(String id) { this.id = id; }
     public String getOrderId() { return orderId; }
     public void setOrderId(String orderId) { this.orderId = orderId; }
+    public String getInvoiceNumber() { return invoiceNumber; }
+    public void setInvoiceNumber(String invoiceNumber) { this.invoiceNumber = invoiceNumber; }
     public Date getInvoiceDate() { return invoiceDate; }
     public void setInvoiceDate(Date invoiceDate) { this.invoiceDate = invoiceDate; }
     public Date getDueDate() { return dueDate; }
@@ -46,4 +50,7 @@ public class Invoice {
     public void setStatus(String status) { this.status = status; }
     public List<InvoiceItem> getItems() { return items; }
     public void setItems(List<InvoiceItem> items) { this.items = items; }
+    
+    // Compatibility methods
+    public String getDate() { return invoiceDate != null ? invoiceDate.toString() : ""; }
 } 

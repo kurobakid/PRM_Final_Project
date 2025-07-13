@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Login"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/purple_700"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Access admin panel with special privileges"
+        android:textSize="16sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="32dp"/>
+
+    <EditText
+        android:id="@+id/editTextAdminEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Admin Email"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/search_background"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"/>
+
+    <EditText
+        android:id="@+id/editTextAdminPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Admin Password"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/search_background"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"/>
+
+    <EditText
+        android:id="@+id/editTextAdminCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Admin Code (ADMIN123)"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/search_background"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"/>
+
+    <Button
+        android:id="@+id/buttonAdminLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login as Admin"
+        android:backgroundTint="@color/purple_700"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/buttonCreateAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Admin Account"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/textBackToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="← Back to Regular Login"
+        android:textColor="@color/purple_700"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"/>
+
+</LinearLayout> 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Firebase Admin Panel"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manage your Firebase data"
+        android:textSize="16sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="32dp"/>
+
+    <Button
+        android:id="@+id/buttonInitializeData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Initialize Sample Data"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/buttonClearData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear All Data"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:backgroundTint="@color/purple_700"
+        android:layout_marginBottom="32dp"/>
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ready to manage data"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⚠️ Warning: Clear All Data will remove all data from Firebase!"
+        android:textSize="12sp"
+        android:textColor="@color/purple_700"
+        android:gravity="center"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout> 
