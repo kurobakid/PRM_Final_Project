@@ -155,9 +155,10 @@ public class FirebaseRepository {
                             banner.setId(document.getId());
                             banner.setTitle(document.getString("title"));
                             banner.setDescription(document.getString("description"));
-                            // Set default image for now
+                            banner.setImageUrl(document.getString("imageUrl")); // ✅ FIXED
                             banner.setImageResource(android.R.drawable.ic_menu_gallery);
                             banners.add(banner);
+
                         } catch (Exception e) {
                             Log.w(TAG, "Error parsing banner document: " + document.getId(), e);
                         }

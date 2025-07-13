@@ -1,14 +1,19 @@
 package com.example.finalproject.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Banner;
+
 import java.util.List;
 
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerViewHolder> {
@@ -34,7 +39,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
 
     @Override
     public int getItemCount() {
-        return banners.size();
+        return banners != null ? banners.size() : 0;
     }
 
     static class BannerViewHolder extends RecyclerView.ViewHolder {
@@ -49,9 +54,18 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         }
 
         public void bind(Banner banner) {
-            bannerImage.setImageResource(banner.getImageResource());
+            if (banner.getImageUrl() != null && !banner.getImageUrl().isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .load(banner.getImageUrl())
+                        .placeholder(R.drawable.address_selection_background)
+                        .into(bannerImage);
+            } else {
+                bannerImage.setImageResource(banner.getImageResource());
+            }
+
             bannerTitle.setText(banner.getTitle());
             bannerDescription.setText(banner.getDescription());
         }
+
     }
-} 
+}

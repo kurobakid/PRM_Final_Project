@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
         initializeViews(root);
         setupAdapters();
         loadDataFromFirebase();
-        setupClickListeners();
+//        setupClickListeners();
         
         return root;
     }
@@ -57,10 +57,10 @@ public class HomeFragment extends Fragment {
     private void initializeViews(View root) {
         searchEditText = root.findViewById(R.id.editTextSearch);
         bannerViewPager = root.findViewById(R.id.viewPagerBanner);
-        categoryChipGroup = root.findViewById(R.id.chipGroupCategories);
+//        categoryChipGroup = root.findViewById(R.id.chipGroupCategories);
         productRecyclerView = root.findViewById(R.id.recyclerViewProducts);
-        cartIcon = root.findViewById(R.id.imageViewCart);
-        profileIcon = root.findViewById(R.id.imageViewProfile);
+//        cartIcon = root.findViewById(R.id.imageViewCart);
+//        profileIcon = root.findViewById(R.id.imageViewProfile);
     }
 
     private void setupAdapters() {
@@ -222,19 +222,18 @@ public class HomeFragment extends Fragment {
         productAdapter.notifyDataSetChanged();
     }
 
-    private void setupClickListeners() {
-        searchEditText.setOnClickListener(v -> {
-            // Navigate to search screen
-            androidx.navigation.Navigation.findNavController(requireView())
-                    .navigate(R.id.action_homeFragment_to_searchFragment);
-        });
+//    private void setupClickListeners() {
+//        searchEditText.setOnClickListener(v -> {
+//            // Navigate to search screen
+//            androidx.navigation.Navigation.findNavController(requireView())
+//                    .navigate(R.id.action_homeFragment_to_searchFragment);
+//        });
         
-        cartIcon.setOnClickListener(v -> {
-            // TODO: Navigate to cart screen
-        });
-        
-        profileIcon.setOnClickListener(v -> {
-            // TODO: Navigate to profile screen
-        });
-    }
+//        cartIcon.setOnClickListener(v -> {
+//            // TODO: Navigate to cart screen
+//        });
+//
+//        profileIcon.setOnClickListener(v -> {
+//            // TODO: Navigate to profile screen
+//        });
 }

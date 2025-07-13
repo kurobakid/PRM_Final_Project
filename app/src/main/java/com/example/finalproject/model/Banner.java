@@ -8,9 +8,7 @@ public class Banner {
     private String imageUrl;
     private boolean active;
 
-    // Default constructor required for Firebase
-    public Banner() {
-    }
+    public Banner() {} // Needed for Firestore
 
     public Banner(String title, String description, int imageResource) {
         this.title = title;
@@ -19,15 +17,8 @@ public class Banner {
         this.active = true;
     }
 
-    public Banner(String id, String title, String description, int imageResource) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.imageResource = imageResource;
-        this.active = true;
-    }
 
-    // Getters and Setters
+    // 🔥 Getters & Setters đầy đủ
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -45,4 +36,4 @@ public class Banner {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
-} 
+}
