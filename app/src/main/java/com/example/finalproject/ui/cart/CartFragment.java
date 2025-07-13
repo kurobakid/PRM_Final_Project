@@ -1,5 +1,6 @@
 package com.example.finalproject.ui.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.ui.payment.ConfirmActivity;
 import com.example.finalproject.utils.FirebaseRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class CartFragment extends Fragment {
     private CartAdapter cartAdapter;
     private FirebaseRepository repository;
     private List<Product> cartItems = new ArrayList<>();
+    private double totalAmount = 0.0;
 
     @Nullable
     @Override
@@ -44,6 +47,21 @@ public class CartFragment extends Fragment {
         loadCartFromFirebase();
         setupClickListeners();
 
+        buttonCheckout.setOnClickListener(new View.OnClickListener() {
+            // TODO: Navigate to confirm screen
+            public void onClick(View v) {
+                if (cartItems.isEmpty()) {
+                    Toast.makeText(getActivity(), "Your cart is empty. Please add items to proceed.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Proceed to confirm logic
+                    // For now, just show a message
+                    Intent intent = new Intent(getActivity(), ConfirmActivity.class);
+                    intent.putExtra("total", totalAmount);
+                    intent.putExtra("cartItems", new ArrayList<>(cartItems));
+                    startActivity(intent);
+                }
+            }
+        });
         return view;
     }
 
@@ -141,6 +159,7 @@ public class CartFragment extends Fragment {
         for (Product product : cartItems) {
             total += product.getPrice() * product.getQuantity(); // Now using actual quantity
         }
+        totalAmount = total;
         textViewTotal.setText(String.format("Total: $%.2f", total));
     }
 
