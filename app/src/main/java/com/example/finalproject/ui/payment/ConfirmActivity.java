@@ -124,7 +124,6 @@ public class ConfirmActivity extends AppCompatActivity {
                                 order.setItems(orderItems);
                                 order.setStatus("Paid");
                                 order.setTotal(totalDBVND);
-                                order.setStatus("Success");
                                 order.setPaymentMethod("ZaloPay");
                                 order.setShipping(100000.0);
                                 order.setSubtotal(totalDB);
@@ -173,7 +172,6 @@ public class ConfirmActivity extends AppCompatActivity {
                                     orderItems.add(itemMap);
                                 }
                                 order.setItems(orderItems);
-                                order.setStatus("Paid");
                                 order.setTotal(totalDBVND);
                                 order.setStatus("Canceled");
                                 order.setPaymentMethod("ZaloPay");
@@ -224,9 +222,8 @@ public class ConfirmActivity extends AppCompatActivity {
                                     orderItems.add(itemMap);
                                 }
                                 order.setItems(orderItems);
-                                order.setStatus("Paid");
                                 order.setTotal(totalDBVND);
-                                order.setStatus("Error");
+                                order.setStatus("Canceled");
                                 order.setPaymentMethod("ZaloPay");
                                 order.setShipping(100000.0);
                                 order.setSubtotal(totalDB);
