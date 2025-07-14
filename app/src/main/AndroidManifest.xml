@@ -89,6 +89,8 @@
             android:exported="false" />
         <activity android:name=".ui.admin.OrderDetailActivity" />
 
+        <activity android:name=".ui.home.AllProductsActivity" />
+
     </application>
 
 </manifest>

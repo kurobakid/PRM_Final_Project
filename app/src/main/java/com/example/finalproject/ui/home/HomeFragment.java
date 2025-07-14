@@ -1,9 +1,11 @@
 package com.example.finalproject.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,8 +21,10 @@ import com.example.finalproject.adapter.ProductAdapter;
 import com.example.finalproject.model.Banner;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.ui.home.AllProductsActivity;
 import com.example.finalproject.utils.FirebaseRepository;
 import com.google.android.material.chip.ChipGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +34,12 @@ public class HomeFragment extends Fragment {
     private ChipGroup categoryChipGroup;
     private RecyclerView productRecyclerView;
     private ImageView cartIcon, profileIcon;
-    
+    private Button viewAllButton;
+
     private BannerAdapter bannerAdapter;
     private CategoryAdapter categoryAdapter;
     private ProductAdapter productAdapter;
-    
+
     private FirebaseRepository repository;
     private List<Banner> banners = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
@@ -43,34 +48,30 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        
+
         repository = new FirebaseRepository();
-        
+
         initializeViews(root);
         setupAdapters();
         loadDataFromFirebase();
-//        setupClickListeners();
-        
+        setupClickListeners();
+
         return root;
     }
 
     private void initializeViews(View root) {
         searchEditText = root.findViewById(R.id.editTextSearch);
         bannerViewPager = root.findViewById(R.id.viewPagerBanner);
-//        categoryChipGroup = root.findViewById(R.id.chipGroupCategories);
         productRecyclerView = root.findViewById(R.id.recyclerViewProducts);
-//        cartIcon = root.findViewById(R.id.imageViewCart);
-//        profileIcon = root.findViewById(R.id.imageViewProfile);
+        viewAllButton = root.findViewById(R.id.buttonViewAll);
     }
 
     private void setupAdapters() {
-        // Initialize adapters with empty data
         bannerAdapter = new BannerAdapter(banners);
         bannerViewPager.setAdapter(bannerAdapter);
 
         categoryAdapter = new CategoryAdapter(categories);
         categoryAdapter.setOnCategoryClickListener(category -> {
-            // TODO: Filter products by category
             Toast.makeText(getContext(), "Filter by: " + category.getName(), Toast.LENGTH_SHORT).show();
         });
 
@@ -78,7 +79,6 @@ public class HomeFragment extends Fragment {
         productAdapter.setOnProductClickListener(new ProductAdapter.OnProductClickListener() {
             @Override
             public void onProductClick(Product product) {
-                // TODO: Navigate to product detail
                 Toast.makeText(getContext(), "View: " + product.getName(), Toast.LENGTH_SHORT).show();
             }
 
@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment {
                     public void onSuccess(List<Void> data) {
                         Toast.makeText(getContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
                     }
+
                     @Override
                     public void onFailure(String error) {
                         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
@@ -98,11 +99,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onWishlistClick(Product product) {
-                // TODO: Add to wishlist
                 Toast.makeText(getContext(), "Added to wishlist: " + product.getName(), Toast.LENGTH_SHORT).show();
             }
         });
-        
+
         productRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         productRecyclerView.setAdapter(productAdapter);
     }
@@ -124,8 +124,6 @@ public class HomeFragment extends Fragment {
             public void onFailure(String error) {
                 if (isAdded()) {
                     Toast.makeText(getContext(), "Failed to load banners", Toast.LENGTH_SHORT).show();
-                    // Load fallback data
-                    loadFallbackBanners();
                 }
             }
         });
@@ -145,19 +143,18 @@ public class HomeFragment extends Fragment {
             public void onFailure(String error) {
                 if (isAdded()) {
                     Toast.makeText(getContext(), "Failed to load categories", Toast.LENGTH_SHORT).show();
-                    // Load fallback data
-                    loadFallbackCategories();
                 }
             }
         });
 
-        // Load products
+        // Load products (limit 6)
         repository.loadProducts(new FirebaseRepository.DataCallback<Product>() {
             @Override
             public void onSuccess(List<Product> data) {
                 if (isAdded()) {
                     products.clear();
-                    products.addAll(data);
+                    int limit = Math.min(data.size(), 6);
+                    products.addAll(data.subList(0, limit));
                     productAdapter.notifyDataSetChanged();
                 }
             }
@@ -166,10 +163,15 @@ public class HomeFragment extends Fragment {
             public void onFailure(String error) {
                 if (isAdded()) {
                     Toast.makeText(getContext(), "Failed to load products", Toast.LENGTH_SHORT).show();
-                    // Load fallback data
-                    loadFallbackProducts();
                 }
             }
+        });
+    }
+
+    private void setupClickListeners() {
+        viewAllButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), AllProductsActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -191,49 +193,4 @@ public class HomeFragment extends Fragment {
             }, 3000);
         }
     }
-
-    // Fallback methods for when Firebase data is not available
-    private void loadFallbackBanners() {
-        banners.clear();
-        banners.add(new Banner("Special Offer", "Get 20% off on all smartphones", R.drawable.ic_launcher_background));
-        banners.add(new Banner("New Arrivals", "Latest laptops and tablets", R.drawable.ic_launcher_background));
-        banners.add(new Banner("Accessories", "Premium accessories at best prices", R.drawable.ic_launcher_background));
-        bannerAdapter.notifyDataSetChanged();
-        setupBannerAutoScroll();
-    }
-
-    private void loadFallbackCategories() {
-        categories.clear();
-        categories.add(new Category("Phones", R.drawable.ic_launcher_foreground));
-        categories.add(new Category("Laptops", R.drawable.ic_launcher_foreground));
-        categories.add(new Category("Tablets", R.drawable.ic_launcher_foreground));
-        categories.add(new Category("Accessories", R.drawable.ic_launcher_foreground));
-        categoryAdapter.notifyDataSetChanged();
-    }
-
-    private void loadFallbackProducts() {
-        products.clear();
-        products.add(new Product("iPhone 15 Pro", "Apple", 999.99, 4.5, R.drawable.ic_launcher_foreground));
-        products.add(new Product("Samsung Galaxy S24", "Samsung", 899.99, 4.3, R.drawable.ic_launcher_foreground));
-        products.add(new Product("MacBook Pro M3", "Apple", 1999.99, 4.8, R.drawable.ic_launcher_foreground));
-        products.add(new Product("Dell XPS 13", "Dell", 1299.99, 4.4, R.drawable.ic_launcher_foreground));
-        products.add(new Product("iPad Pro", "Apple", 799.99, 4.6, R.drawable.ic_launcher_foreground));
-        products.add(new Product("AirPods Pro", "Apple", 249.99, 4.7, R.drawable.ic_launcher_foreground));
-        productAdapter.notifyDataSetChanged();
-    }
-
-//    private void setupClickListeners() {
-//        searchEditText.setOnClickListener(v -> {
-//            // Navigate to search screen
-//            androidx.navigation.Navigation.findNavController(requireView())
-//                    .navigate(R.id.action_homeFragment_to_searchFragment);
-//        });
-        
-//        cartIcon.setOnClickListener(v -> {
-//            // TODO: Navigate to cart screen
-//        });
-//
-//        profileIcon.setOnClickListener(v -> {
-//            // TODO: Navigate to profile screen
-//        });
 }
