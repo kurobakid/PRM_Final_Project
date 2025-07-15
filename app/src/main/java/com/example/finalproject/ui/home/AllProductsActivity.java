@@ -50,6 +50,32 @@ public class AllProductsActivity extends AppCompatActivity {
         productAdapter = new ProductAdapter(displayedProducts);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(productAdapter);
+        productAdapter.setOnProductClickListener(new ProductAdapter.OnProductClickListener() {
+            @Override
+            public void onProductClick(Product product) {
+                Toast.makeText(getApplicationContext(), "View: " + product.getName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAddToCartClick(Product product) {
+                repository.addToCart(product, new FirebaseRepository.DataCallback<Void>() {
+                    @Override
+                    public void onSuccess(List<Void> data) {
+                        Toast.makeText(getApplicationContext(), "Added to cart!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onWishlistClick(Product product) {
+                Toast.makeText(getApplicationContext(), "Added to wishlist: " + product.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         loadAllProducts();
         setupListeners();

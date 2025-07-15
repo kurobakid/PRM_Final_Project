@@ -5,7 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +24,12 @@ import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.ui.orders.OrdersFragment;
 import com.example.finalproject.ui.payment.zalo.Api.CreateOrder;
+import com.example.finalproject.utils.FirebaseAuthHelper;
 import com.example.finalproject.utils.FirebaseRepository;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.json.JSONObject;
 
@@ -52,21 +60,32 @@ public class ConfirmActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private Address shipAddress;
+    private FirebaseFirestore db;
+    private FirebaseAuthHelper authHelper;
+    private TextView textViewSelectedAddress;
+    private Spinner spinnerAddresses;
+    private List<Address> addressList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
-        repo.getUserAddress(new FirebaseRepository.SingleDataCallback<Address>() {
-            @Override
-            public void onSuccess(Address address) {
-                shipAddress = address;
-            }
-            @Override
-            public void onFailure(String error) {
-                // Handle error
-            }
-        });
+//        repo.getUserAddress(new FirebaseRepository.SingleDataCallback<Address>() {
+//            @Override
+//            public void onSuccess(Address address) {
+//                shipAddress = address;
+//            }
+//            @Override
+//            public void onFailure(String error) {
+//                // Handle error
+//            }
+//        });
+        authHelper = new FirebaseAuthHelper(this);
+        db = FirebaseFirestore.getInstance();
+        textViewSelectedAddress = findViewById(R.id.textViewSelectedAddress);
+        loadUserAddresses();
+        spinnerAddresses = findViewById(R.id.spinnerAddresses); // Add Spinner to your layout
+
 
         recyclerViewConfirm = findViewById(R.id.recyclerViewConfirm);
         textViewTotal = findViewById(R.id.textViewTotal);
@@ -123,10 +142,10 @@ public class ConfirmActivity extends AppCompatActivity {
                                 }
                                 order.setItems(orderItems);
                                 order.setStatus("Paid");
-                                order.setTotal(totalDBVND);
+                                order.setTotal(totalDB);
                                 order.setPaymentMethod("ZaloPay");
                                 order.setShipping(100000.0);
-                                order.setSubtotal(totalDB);
+                                order.setSubtotal(totalDBVND);
                                 order.setTax(0.0);
                                 order.setShippingAddress(shipAddress);
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
@@ -172,11 +191,11 @@ public class ConfirmActivity extends AppCompatActivity {
                                     orderItems.add(itemMap);
                                 }
                                 order.setItems(orderItems);
-                                order.setTotal(totalDBVND);
+                                order.setTotal(totalDB);
                                 order.setStatus("Canceled");
                                 order.setPaymentMethod("ZaloPay");
                                 order.setShipping(100000.0);
-                                order.setSubtotal(totalDB);
+                                order.setSubtotal(totalDBVND);
                                 order.setTax(0.0);
                                 order.setShippingAddress(shipAddress);
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
@@ -222,11 +241,11 @@ public class ConfirmActivity extends AppCompatActivity {
                                     orderItems.add(itemMap);
                                 }
                                 order.setItems(orderItems);
-                                order.setTotal(totalDBVND);
+                                order.setTotal(totalDB);
                                 order.setStatus("Canceled");
                                 order.setPaymentMethod("ZaloPay");
                                 order.setShipping(100000.0);
-                                order.setSubtotal(totalDB);
+                                order.setSubtotal(totalDBVND);
                                 order.setTax(0.0);
                                 order.setShippingAddress(shipAddress);
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
@@ -283,5 +302,84 @@ public class ConfirmActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
+    }
+    private void loadUserAddresses() {
+        FirebaseUser user = authHelper.getCurrentUser();
+        if (user == null) return;
+
+        db.collection("addresses")
+                .whereEqualTo("userId", user.getUid())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    addressList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Address address = document.toObject(Address.class);
+                        address.setId(document.getId());
+                        addressList.add(address);
+                    }
+                    if (addressList.isEmpty()) {
+                        createSampleAddress();
+                    }
+                    setupAddressSpinner();
+                })
+                .addOnFailureListener(e -> {
+                    createSampleAddress();
+                    setupAddressSpinner();
+                });
+    }
+    private void setupAddressSpinner() {
+        ArrayAdapter<Address> adapter = new ArrayAdapter<Address>(this,
+                android.R.layout.simple_spinner_item, addressList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView label = (TextView) super.getView(position, convertView, parent);
+                Address address = getItem(position);
+                label.setText(address.getFullName() + ", " + address.getAddress());
+                return label;
+            }
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                TextView label = (TextView) super.getDropDownView(position, convertView, parent);
+                Address address = getItem(position);
+                label.setText(address.getAddress());
+                return label;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAddresses.setAdapter(adapter);
+
+        spinnerAddresses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                shipAddress = addressList.get(position);
+                updateAddressDisplay();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+    private void createSampleAddress() {
+        shipAddress = new Address();
+        shipAddress.setId("sample");
+        shipAddress.setFullName("John Doe");
+        shipAddress.setAddress("123 Main Street, Apt 4B");
+        shipAddress.setCity("New York");
+        shipAddress.setState("NY");
+        shipAddress.setZipCode("10001");
+        shipAddress.setPhone("+1-555-123-4567");
+        updateAddressDisplay();
+    }
+
+    private void updateAddressDisplay() {
+        if (shipAddress != null) {
+            String addressText = String.format("%s\n%s\n%s, %s %s\n%s",
+                    shipAddress.getFullName(),
+                    shipAddress.getAddress(),
+                    shipAddress.getCity(),
+                    shipAddress.getState(),
+                    shipAddress.getZipCode(),
+                    shipAddress.getPhone());
+            textViewSelectedAddress.setText(addressText);
+        }
     }
 }

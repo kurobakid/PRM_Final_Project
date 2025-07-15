@@ -9,7 +9,7 @@ import com.example.finalproject.model.Order;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class OrderDetailActivity extends AppCompatActivity {
+public class  OrderDetailActivity extends AppCompatActivity {
 
     private TextView textOrderId, textStatus, textTotal, textDate, textPayment, textShipping;
 
@@ -36,7 +36,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             textPayment.setText(order.getPaymentMethod());
 
             if (order.getShippingAddress() != null) {
-                textShipping.setText(order.getShippingAddress().toString());
+                textShipping.setText(order.getShippingAddress().getAddress().toString());
             } else {
                 textShipping.setText("No shipping address");
             }

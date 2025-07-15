@@ -54,7 +54,6 @@ dependencies {
     
     // Glide for image loading
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    implementation(name: 'zpdk-release-v3.1', ext: 'aar')
     implementation libs.firebase.appcheck.playintegrity
     implementation fileTree(dir: 'D:\\Desktop\\PRM\\PRM_Final_Project\\app\\ZaloSDK', include: ['*.aar', '*.jar'], exclude: [])
     implementation libs.activity
