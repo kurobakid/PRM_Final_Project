@@ -41,13 +41,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
-            <ImageView
-                android:id="@+id/imageViewProductDetailWishlist"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_favorite_border"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="4dp"/>
         </LinearLayout>
 
         <TextView
@@ -59,15 +52,30 @@
             android:textColor="@color/purple_700"
             android:layout_marginBottom="4dp"/>
 
-        <RatingBar
-            android:id="@+id/ratingBarProductDetail"
-            style="?android:attr/ratingBarStyleSmall"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="0.1"
-            android:rating="4.5"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical">
+
+            <RatingBar
+                android:id="@+id/ratingBarProductDetail"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.1"
+                android:rating="4.5"/>
+
+            <TextView
+                android:id="@+id/textViewAverageRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(0.0)"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewProductDetailPrice"
@@ -106,14 +114,15 @@
                 android:layout_marginEnd="8dp"/>
 
             <Button
-                android:id="@+id/buttonBuyNow"
+                android:id="@+id/buttonWriteReview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Buy Now"
+                android:text="Review"
                 android:backgroundTint="@color/black"
                 android:textColor="@color/white"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <TextView
@@ -123,6 +132,12 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="16dp"/>
 
 
     </LinearLayout>

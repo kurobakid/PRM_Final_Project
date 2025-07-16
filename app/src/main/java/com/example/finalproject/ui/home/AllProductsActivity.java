@@ -1,5 +1,6 @@
 package com.example.finalproject.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,8 +10,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.ProductAdapter;
 import com.example.finalproject.model.Product;
@@ -53,7 +57,11 @@ public class AllProductsActivity extends AppCompatActivity {
         productAdapter.setOnProductClickListener(new ProductAdapter.OnProductClickListener() {
             @Override
             public void onProductClick(Product product) {
-                Toast.makeText(getApplicationContext(), "View: " + product.getName(), Toast.LENGTH_SHORT).show();
+                // In OrderDetailActivity.java, inside product click listener
+                Intent intent = new Intent(AllProductsActivity.this, MainActivity.class);
+                intent.putExtra("navigateToDetail", true);
+                intent.putExtra("productId", product.getId());
+                startActivity(intent);
             }
 
             @Override

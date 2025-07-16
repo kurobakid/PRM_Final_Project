@@ -7,6 +7,7 @@ import com.example.finalproject.model.Banner;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Order;
+import com.example.finalproject.model.Review;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -320,7 +321,6 @@ public class FirebaseRepository {
 
         db.collection("orders")
                 .whereEqualTo("userId", currentUser.getUid())
-                .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Order> orders = new ArrayList<>();
@@ -439,5 +439,75 @@ public class FirebaseRepository {
                     }
                 })
                 .addOnFailureListener(e -> callback.onFailure("Failed to get address: " + e.getMessage()));
+    }
+    // Get all paid orders for the current user
+    public void getUserPaidOrders(String userId, DataCallback<Order> callback) {
+        db.collection("orders")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("status", "Paid")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Order> orders = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        try {
+                            Order order = document.toObject(Order.class);
+                            order.setId(document.getId());
+                            orders.add(order);
+                        } catch (Exception e) {
+                            Log.w(TAG, "Error parsing order document: " + document.getId(), e);
+                        }
+                    }
+                    callback.onSuccess(orders);
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error loading paid orders", e);
+                    callback.onFailure("Failed to load paid orders: " + e.getMessage());
+                });
+    }
+
+    // Add a review to a product
+    public void addReview(Review review, DataCallback<Void> callback) {
+        if (review.getProductId() == null) {
+            callback.onFailure("Product ID is required");
+            return;
+        }
+        db.collection("products")
+                .document(review.getProductId())
+                .collection("reviews")
+                .add(review)
+                .addOnSuccessListener(documentReference -> callback.onSuccess(null))
+                .addOnFailureListener(e -> callback.onFailure("Failed to add review: " + e.getMessage()));
+    }
+    public void loadProductReviews(String productId, DataCallback<Review> callback) {
+        db.collection("products")
+                .document(productId)
+                .collection("reviews")
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Review> reviews = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        try {
+                            Review review = document.toObject(Review.class);
+                            review.setId(document.getId());
+                            reviews.add(review);
+                        } catch (Exception e) {
+                            Log.w(TAG, "Error parsing review document: " + document.getId(), e);
+                        }
+                    }
+                    callback.onSuccess(reviews);
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error loading reviews", e);
+                    callback.onFailure("Failed to load reviews: " + e.getMessage());
+                });
+    }
+    public void updateProductRating(String productId, float rating, DataCallback<Void> callback) {
+        FirebaseFirestore.getInstance()
+                .collection("products")
+                .document(productId)
+                .update("rating", rating)
+                .addOnSuccessListener(aVoid -> callback.onSuccess(new ArrayList<>()))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 } 

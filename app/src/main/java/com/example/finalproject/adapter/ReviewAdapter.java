@@ -21,13 +21,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     @NonNull
     @Override
     public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_review, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_review, parent, false);
         return new ReviewViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
-        holder.bind(reviews.get(position));
+        Review review = reviews.get(position);
+        holder.textViewUserName.setText(review.getUserName());
+        holder.ratingBar.setRating(review.getRating());
+        holder.textViewComment.setText(review.getComment());
     }
 
     @Override
@@ -35,21 +39,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         return reviews.size();
     }
 
-    static class ReviewViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewUserName, textViewComment;
-        private RatingBar ratingBar;
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+        notifyDataSetChanged();
+    }
 
-        public ReviewViewHolder(@NonNull View itemView) {
+    static class ReviewViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewUserName, textViewComment;
+        RatingBar ratingBar;
+
+        ReviewViewHolder(View itemView) {
             super(itemView);
             textViewUserName = itemView.findViewById(R.id.textViewReviewUserName);
-            textViewComment = itemView.findViewById(R.id.textViewReviewComment);
             ratingBar = itemView.findViewById(R.id.ratingBarReview);
-        }
-
-        public void bind(Review review) {
-            textViewUserName.setText(review.getUserName());
-            textViewComment.setText(review.getComment());
-            ratingBar.setRating(review.getRating());
+            textViewComment = itemView.findViewById(R.id.textViewReviewComment);
         }
     }
-} 
+}

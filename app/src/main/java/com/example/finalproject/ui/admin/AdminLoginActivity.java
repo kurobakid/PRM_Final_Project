@@ -38,8 +38,6 @@ public class AdminLoginActivity extends Activity {
         emailEditText = findViewById(R.id.editTextAdminEmail);
         passwordEditText = findViewById(R.id.editTextAdminPassword);
         adminCodeEditText = findViewById(R.id.editTextAdminCode);
-        loginButton = findViewById(R.id.buttonAdminLogin);
-        createAdminButton = findViewById(R.id.buttonCreateAdmin);
         backToLoginText = findViewById(R.id.textBackToLogin);
     }
 

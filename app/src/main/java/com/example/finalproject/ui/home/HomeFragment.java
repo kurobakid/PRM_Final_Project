@@ -2,6 +2,8 @@ package com.example.finalproject.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,7 @@ public class HomeFragment extends Fragment {
     private List<Banner> banners = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
     private List<Product> products = new ArrayList<>();
+    private String currentQuery = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class HomeFragment extends Fragment {
         setupAdapters();
         loadDataFromFirebase();
         setupClickListeners();
+        setupListeners();
 
         return root;
     }
@@ -69,7 +73,30 @@ public class HomeFragment extends Fragment {
         productRecyclerView = root.findViewById(R.id.recyclerViewProducts);
         viewAllButton = root.findViewById(R.id.buttonViewAll);
     }
+    private void setupListeners() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentQuery = s.toString().toLowerCase();
+                applyProductFilter();
+            }
+        });
+    }
 
+    private void applyProductFilter() {
+        List<Product> filtered = new ArrayList<>();
+        for (Product p : products) {
+            boolean matchesSearch = p.getName().toLowerCase().contains(currentQuery)
+                    || (p.getDescription() != null && p.getDescription().toLowerCase().contains(currentQuery));
+            if (matchesSearch) {
+                filtered.add(p);
+            }
+        }
+        productAdapter.setProducts(filtered);
+        productAdapter.notifyDataSetChanged();
+    }
     private void setupAdapters() {
         bannerAdapter = new BannerAdapter(banners);
         bannerViewPager.setAdapter(bannerAdapter);

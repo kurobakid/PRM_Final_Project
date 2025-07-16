@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNav, navController);
         handleNavigationIntent(getIntent());
     }
+    // In MainActivity.java, update handleNavigationIntent:
     private void handleNavigationIntent(Intent intent) {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_content_main);
@@ -48,12 +49,18 @@ public class MainActivity extends AppCompatActivity {
             BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
             bottomNav.setSelectedItemId(R.id.nav_orders);
         }
+        if (intent.getBooleanExtra("navigateToCart", false)) {
+            BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+            bottomNav.setSelectedItemId(R.id.nav_cart);
+        }
         if (intent.getBooleanExtra("navigateToAddressBook", false)) {
             navController.navigate(R.id.nav_address_book);
         }
-//        if (intent.getBooleanExtra("navigateToDetail", false)) {
-//            navController.navigate(R.id.nav_product_detail);
-//        }
+        if (intent.getBooleanExtra("navigateToDetail", false)) {
+            Bundle args = new Bundle();
+            args.putString("productId", intent.getStringExtra("productId"));
+            navController.navigate(R.id.nav_product_detail, args);
+        }
     }
     @Override
     protected void onNewIntent(Intent intent) {
