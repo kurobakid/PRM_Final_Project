@@ -17,7 +17,7 @@ import com.example.finalproject.utils.FirebaseAuthHelper;
 
 public class AdminLoginActivity extends Activity {
     private EditText emailEditText, passwordEditText, adminCodeEditText;
-    private Button loginButton, createAdminButton;
+    private Button loginButton;
     private TextView backToLoginText;
     private AdminAuthHelper adminAuthHelper;
     private FirebaseAuthHelper authHelper;
@@ -39,6 +39,7 @@ public class AdminLoginActivity extends Activity {
         passwordEditText = findViewById(R.id.editTextAdminPassword);
         adminCodeEditText = findViewById(R.id.editTextAdminCode);
         backToLoginText = findViewById(R.id.textBackToLogin);
+        loginButton = findViewById(R.id.buttonAdminLogin);
     }
 
     private void setupListeners() {
@@ -46,9 +47,9 @@ public class AdminLoginActivity extends Activity {
             loginAsAdmin();
         });
 
-        createAdminButton.setOnClickListener(v -> {
-            createAdminUser();
-        });
+//        createAdminButton.setOnClickListener(v -> {
+//            createAdminUser();
+//        });
 
         backToLoginText.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
@@ -110,43 +111,43 @@ public class AdminLoginActivity extends Activity {
         });
     }
 
-    private void createAdminUser() {
-        String email = emailEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
-        String adminCode = adminCodeEditText.getText().toString().trim();
-
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(adminCode)) {
-            Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        createAdminButton.setEnabled(false);
-        createAdminButton.setText("Creating...");
-
-        adminAuthHelper.createAdminUser(email, password, adminCode, new AdminAuthHelper.AdminCreationCallback() {
-            @Override
-            public void onSuccess(String message) {
-                Toast.makeText(AdminLoginActivity.this, message, Toast.LENGTH_LONG).show();
-                resetCreateButton();
-                // Auto-login after creation
-                loginAsAdmin();
-            }
-
-            @Override
-            public void onError(String error) {
-                Toast.makeText(AdminLoginActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
-                resetCreateButton();
-            }
-        });
-    }
+//    private void createAdminUser() {
+//        String email = emailEditText.getText().toString().trim();
+//        String password = passwordEditText.getText().toString().trim();
+//        String adminCode = adminCodeEditText.getText().toString().trim();
+//
+//        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(adminCode)) {
+//            Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+////        createAdminButton.setEnabled(false);
+////        createAdminButton.setText("Creating...");
+//
+//        adminAuthHelper.createAdminUser(email, password, adminCode, new AdminAuthHelper.AdminCreationCallback() {
+//            @Override
+//            public void onSuccess(String message) {
+//                Toast.makeText(AdminLoginActivity.this, message, Toast.LENGTH_LONG).show();
+//                resetCreateButton();
+//                // Auto-login after creation
+//                loginAsAdmin();
+//            }
+//
+//            @Override
+//            public void onError(String error) {
+//                Toast.makeText(AdminLoginActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
+//                resetCreateButton();
+//            }
+//        });
+//    }
 
     private void resetLoginButton() {
         loginButton.setEnabled(true);
         loginButton.setText("Login as Admin");
     }
 
-    private void resetCreateButton() {
-        createAdminButton.setEnabled(true);
-        createAdminButton.setText("Create Admin Account");
-    }
+//    private void resetCreateButton() {
+//        createAdminButton.setEnabled(true);
+//        createAdminButton.setText("Create Admin Account");
+//    }
 } 
