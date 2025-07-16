@@ -22,6 +22,8 @@ import com.example.finalproject.adapter.ConfirmAdapter;
 import com.example.finalproject.model.Address;
 import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.ui.address.AddressBookFragment;
+import com.example.finalproject.ui.orders.OrderSuccessActivity;
 import com.example.finalproject.ui.orders.OrdersFragment;
 import com.example.finalproject.ui.payment.zalo.Api.CreateOrder;
 import com.example.finalproject.utils.FirebaseAuthHelper;
@@ -151,12 +153,12 @@ public class ConfirmActivity extends AppCompatActivity {
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
                                     @Override
                                     public void onSuccess(String orderId) {
+                                        Intent intent = new Intent(ConfirmActivity.this, OrderSuccessActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                         repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
                                             @Override
                                             public void onSuccess(Void data) {
-                                                Intent intent = new Intent(ConfirmActivity.this, OrdersFragment.class);
-                                                startActivity(intent);
-                                                finish();
                                             }
                                             @Override
                                             public void onFailure(String error) {
@@ -201,12 +203,12 @@ public class ConfirmActivity extends AppCompatActivity {
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
                                     @Override
                                     public void onSuccess(String orderId) {
+                                        Intent intent = new Intent(ConfirmActivity.this, OrderSuccessActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                         repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
                                             @Override
                                             public void onSuccess(Void data) {
-                                                Intent intent = new Intent(ConfirmActivity.this, OrdersFragment.class);
-                                                startActivity(intent);
-                                                finish();
                                             }
                                             @Override
                                             public void onFailure(String error) {
@@ -251,12 +253,12 @@ public class ConfirmActivity extends AppCompatActivity {
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
                                     @Override
                                     public void onSuccess(String orderId) {
+                                        Intent intent = new Intent(ConfirmActivity.this, OrderSuccessActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                         repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
                                             @Override
                                             public void onSuccess(Void data) {
-                                                Intent intent = new Intent(ConfirmActivity.this, OrdersFragment.class);
-                                                startActivity(intent);
-                                                finish();
                                             }
                                             @Override
                                             public void onFailure(String error) {
@@ -318,14 +320,35 @@ public class ConfirmActivity extends AppCompatActivity {
                         addressList.add(address);
                     }
                     if (addressList.isEmpty()) {
-                        createSampleAddress();
+                        showNoAddressDialog();
+                    } else {
+                        setupAddressSpinner();
                     }
-                    setupAddressSpinner();
                 })
                 .addOnFailureListener(e -> {
-                    createSampleAddress();
-                    setupAddressSpinner();
+                    showNoAddressDialog();
                 });
+    }
+
+    // Add this method to show the dialog and redirect
+    private void showNoAddressDialog() {
+        buttonConfirm.setEnabled(false);
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("No Address Found")
+                .setMessage("You need to add a shipping address before confirming your order. Go to Address Book now?")
+                .setCancelable(false)
+                .setPositiveButton("Go to Address Book", (dialog, which) -> {
+                    // Redirect to AddressBookActivity or Fragment
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("navigateToAddressBook", true);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // Optionally finish or just dismiss
+                    finish();
+                })
+                .show();
     }
     private void setupAddressSpinner() {
         ArrayAdapter<Address> adapter = new ArrayAdapter<Address>(this,
@@ -334,7 +357,7 @@ public class ConfirmActivity extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView label = (TextView) super.getView(position, convertView, parent);
                 Address address = getItem(position);
-                label.setText(address.getFullName() + ", " + address.getAddress());
+                label.setText(address.getAddress());
                 return label;
             }
             @Override
@@ -357,17 +380,6 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-    }
-    private void createSampleAddress() {
-        shipAddress = new Address();
-        shipAddress.setId("sample");
-        shipAddress.setFullName("John Doe");
-        shipAddress.setAddress("123 Main Street, Apt 4B");
-        shipAddress.setCity("New York");
-        shipAddress.setState("NY");
-        shipAddress.setZipCode("10001");
-        shipAddress.setPhone("+1-555-123-4567");
-        updateAddressDisplay();
     }
 
     private void updateAddressDisplay() {

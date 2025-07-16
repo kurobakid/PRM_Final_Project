@@ -4,12 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address Book"
+        android:textColor="#8BC34A"
+        android:textSize="34sp"
+        app:layout_anchor="@+id/recyclerViewAddresses"
+        app:layout_anchorGravity="top|center" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewAddresses"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:clipToPadding="false" />
+        android:layout_height="645dp"
+        android:layout_marginTop="50dp"
+        android:clipToPadding="false"
+        android:padding="16dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddAddress"
@@ -19,5 +30,6 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
         app:fabSize="normal" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 

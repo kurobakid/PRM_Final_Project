@@ -73,6 +73,8 @@ public class OrdersFragment extends Fragment {
                         order.setId(doc.getId());
                         orders.add(order);
                     }
+                    // Sort orders by date descending in Java
+                    orders.sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
                     ordersAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {

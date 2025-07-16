@@ -40,4 +40,5 @@
 
     <!-- Status Colors -->
     <color name="status_online">#10B981</color>
+    <color name="colorOrange">#4CAF50</color>
 </resources>

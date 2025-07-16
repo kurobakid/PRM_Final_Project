@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.BannerAdapter;
 import com.example.finalproject.adapter.CategoryAdapter;
@@ -22,6 +25,7 @@ import com.example.finalproject.model.Banner;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.ui.home.AllProductsActivity;
+import com.example.finalproject.ui.product.ProductDetailFragment;
 import com.example.finalproject.utils.FirebaseRepository;
 import com.google.android.material.chip.ChipGroup;
 
@@ -80,6 +84,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onProductClick(Product product) {
                 Toast.makeText(getContext(), "View: " + product.getName(), Toast.LENGTH_SHORT).show();
+
+                // Create a Bundle to pass the productId to ProductDetailFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("productId", product.getId()); // Assuming Product has a getId() method
+
+                // Navigate to ProductDetailFragment using the Navigation component
+                Navigation.findNavController(getView()).navigate(R.id.action_homeFragment_to_productDetailFragment, bundle);
             }
 
             @Override

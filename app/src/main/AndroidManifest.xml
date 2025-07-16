@@ -17,21 +17,24 @@
         android:theme="@style/Theme.FinalProject"
         tools:targetApi="31">
         <activity
+            android:name=".ui.orders.OrderSuccessActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.payment.ConfirmActivity"
             android:exported="true"
             android:label="Merchant Demo"
             android:launchMode="singleTask">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="demozpdk"
-                    android:host="app" />
-            </intent-filter>
 
-        </activity>
-        <!-- Splash Activity - Launcher -->
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        </activity> <!-- Splash Activity - Launcher -->
         <activity
             android:name=".ui.auth.SplashActivity"
             android:exported="true"
@@ -53,44 +56,31 @@
         <activity
             android:name=".ui.auth.ForgotPasswordActivity"
             android:exported="false"
-            android:theme="@style/Theme.FinalProject.NoActionBar" />
-        
-        <!-- Onboarding Activity -->
+            android:theme="@style/Theme.FinalProject.NoActionBar" /> <!-- Onboarding Activity -->
         <activity
             android:name=".ui.onboarding.OnboardingActivity"
             android:exported="false"
-            android:theme="@style/Theme.FinalProject.NoActionBar" />
-        
-        <!-- Main Activity -->
+            android:theme="@style/Theme.FinalProject.NoActionBar" /> <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:theme="@style/Theme.FinalProject.NoActionBar">
-        </activity>
-        
-        <!-- Admin Activity -->
+            android:theme="@style/Theme.FinalProject.NoActionBar"></activity> <!-- Admin Activity -->
         <activity
             android:name=".ui.admin.AdminActivity"
             android:exported="false"
             android:label="Admin Panel"
-            android:theme="@style/Theme.FinalProject.NoActionBar" />
-            
-        <!-- Admin Login Activity -->
+            android:theme="@style/Theme.FinalProject.NoActionBar" /> <!-- Admin Login Activity -->
         <activity
             android:name=".ui.admin.AdminLoginActivity"
             android:exported="false"
             android:label="Admin Login"
-            android:theme="@style/Theme.FinalProject.NoActionBar" />
-
-        <!-- Admin CRUD Product Activity -->
+            android:theme="@style/Theme.FinalProject.NoActionBar" /> <!-- Admin CRUD Product Activity -->
         <activity
             android:name=".ui.admin.AddEditProductActivity"
             android:exported="false" />
         <activity android:name=".ui.admin.OrderDetailActivity" />
-
         <activity android:name=".ui.home.AllProductsActivity" />
-
     </application>
 
 </manifest>
