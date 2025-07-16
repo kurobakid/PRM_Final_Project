@@ -71,16 +71,6 @@
         android:padding="16dp"
         android:layout_marginBottom="12dp"/>
 
-    <Button
-        android:id="@+id/buttonCreateAdmin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create Admin Account"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:padding="16dp"
-        android:layout_marginBottom="24dp"/>
 
     <TextView
         android:id="@+id/textBackToLogin"

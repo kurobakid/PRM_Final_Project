@@ -8,7 +8,7 @@ import com.example.finalproject.R;
 
 public class AdminActivity extends AppCompatActivity {
 
-    private Button btnProducts, btnCategories, btnPayments, btnUsers;
+    private Button btnProducts, btnPayments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +17,7 @@ public class AdminActivity extends AppCompatActivity {
 
         // Sidebar buttons
         btnProducts = findViewById(R.id.buttonMenuProducts);
-        btnCategories = findViewById(R.id.buttonMenuCategories);
         btnPayments = findViewById(R.id.buttonMenuPayments);
-        btnUsers = findViewById(R.id.buttonMenuUsers);
 
         // Load default fragment
         replaceFragment(new ProductsFragment());

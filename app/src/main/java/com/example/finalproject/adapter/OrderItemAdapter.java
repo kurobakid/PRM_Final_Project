@@ -1,3 +1,4 @@
+// File: app/src/main/java/com/example/finalproject/adapter/OrderItemAdapter.java
 package com.example.finalproject.adapter;
 
 import android.view.LayoutInflater;
@@ -17,6 +18,15 @@ import java.util.List;
 
 public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.OrderItemViewHolder> {
     private final List<Product> orderItems;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Product product);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public OrderItemAdapter(List<Product> orderItems) {
         this.orderItems = orderItems;
@@ -27,7 +37,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     public OrderItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_cart, parent, false);
-        return new OrderItemViewHolder(view);
+        return new OrderItemViewHolder(view, listener);
     }
 
     @Override
@@ -44,7 +54,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         private final ImageView imageViewProduct;
         private final TextView textViewName, textViewBrand, textViewPrice, textViewQuantity;
 
-        public OrderItemViewHolder(@NonNull View itemView) {
+        public OrderItemViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             imageViewProduct = itemView.findViewById(R.id.imageViewCartProduct);
             textViewName = itemView.findViewById(R.id.textViewCartProductName);
@@ -52,10 +62,15 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             textViewPrice = itemView.findViewById(R.id.textViewCartProductPrice);
             textViewQuantity = itemView.findViewById(R.id.textViewCartProductQuantity);
 
-            // Hide cart-only buttons
             itemView.findViewById(R.id.buttonIncrease).setVisibility(View.GONE);
             itemView.findViewById(R.id.buttonDecrease).setVisibility(View.GONE);
             itemView.findViewById(R.id.buttonRemove).setVisibility(View.GONE);
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null && getBindingAdapterPosition() != RecyclerView.NO_POSITION) {
+                    listener.onItemClick((Product) v.getTag());
+                }
+            });
         }
 
         public void bind(Product product) {
@@ -68,6 +83,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             textViewBrand.setText(product.getBrand());
             textViewPrice.setText(product.getFormattedPrice());
             textViewQuantity.setText(String.valueOf(product.getQuantity()));
+            itemView.setTag(product);
         }
     }
 }

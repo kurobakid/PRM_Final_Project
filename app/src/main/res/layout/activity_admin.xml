@@ -45,20 +45,6 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/buttonMenuCategories"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/menu_button_background"
-            android:drawableStart="@drawable/ic_notifications"
-            android:drawablePadding="8dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="8dp"
-            android:text="Categories"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/buttonMenuPayments"
@@ -75,19 +61,6 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/buttonMenuUsers"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/menu_button_background"
-            android:drawableStart="@drawable/ic_info"
-            android:drawablePadding="8dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="8dp"
-            android:text="Users"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
 
     </LinearLayout>
 

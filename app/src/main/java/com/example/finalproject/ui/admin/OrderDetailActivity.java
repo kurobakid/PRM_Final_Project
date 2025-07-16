@@ -1,16 +1,20 @@
 package com.example.finalproject.ui.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.OrderItemAdapter;
 import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.ui.product.ProductDetailFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +69,15 @@ public class  OrderDetailActivity extends AppCompatActivity {
                 productList.add(product);
             }
             recyclerOrderItems.setAdapter(new OrderItemAdapter(productList));
-
+            OrderItemAdapter adapter = new OrderItemAdapter(productList);
+            adapter.setOnItemClickListener(product -> {
+                // In OrderDetailActivity.java, inside product click listener
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("navigateToDetail", true);
+                intent.putExtra("productId", product.getId());
+                startActivity(intent);
+            });
+            recyclerOrderItems.setAdapter(adapter);
 
             if (order.getShippingAddress() != null) {
                 textShipping.setText(order.getShippingAddress().getAddress().toString());

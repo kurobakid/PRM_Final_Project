@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Merchant Demo</string>
+    <string name="app_name">Confirm Order</string>
     <string name="lbl_sotien">Số Tiền</string>
     <string name="lbl_donhang">DEMO</string>
     <string name="btn_create_order">Tạo Đơn Hàng</string>

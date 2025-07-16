@@ -74,9 +74,7 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:drawableStart="@drawable/ic_search"
-                android:drawablePadding="8dp"
-                android:focusable="false"
-                android:clickable="true"/>
+                android:drawablePadding="8dp"/>
 
 <!--            <ImageView-->
 <!--                android:id="@+id/imageViewCart"-->

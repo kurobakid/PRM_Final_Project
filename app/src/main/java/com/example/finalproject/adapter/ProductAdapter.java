@@ -18,6 +18,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private List<Product> products;
     private OnProductClickListener listener;
 
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     public interface OnProductClickListener {
         void onProductClick(Product product);
         void onAddToCartClick(Product product);
@@ -52,7 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
-        private ImageView productImage, wishlistIcon, addToCartIcon;
+        private ImageView productImage, addToCartIcon;
         private TextView productName, productBrand, productPrice;
         private RatingBar ratingBar;
 
@@ -63,7 +67,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productBrand = itemView.findViewById(R.id.textViewProductBrand);
             productPrice = itemView.findViewById(R.id.textViewProductPrice);
             ratingBar = itemView.findViewById(R.id.ratingBarProduct);
-            wishlistIcon = itemView.findViewById(R.id.imageViewWishlist);
             addToCartIcon = itemView.findViewById(R.id.imageViewAddToCart);
 
             itemView.setOnClickListener(v -> {
@@ -73,12 +76,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 }
             });
 
-            wishlistIcon.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onWishlistClick(products.get(position));
-                }
-            });
 
             addToCartIcon.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -87,7 +84,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 }
             });
         }
-
         public void bind(Product product) {
 
             Glide.with(itemView.getContext())

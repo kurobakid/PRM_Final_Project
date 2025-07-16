@@ -75,14 +75,6 @@
                     android:textStyle="bold"
                     android:textColor="@color/purple_500"/>
 
-                <ImageView
-                    android:id="@+id/imageViewWishlist"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_favorite_border"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="2dp"
-                    android:layout_marginEnd="8dp"/>
 
                 <ImageView
                     android:id="@+id/imageViewAddToCart"

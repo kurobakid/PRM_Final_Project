@@ -23,6 +23,7 @@ import com.example.finalproject.model.Address;
 import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.ui.address.AddressBookFragment;
+import com.example.finalproject.ui.orders.OrderFailActivity;
 import com.example.finalproject.ui.orders.OrderSuccessActivity;
 import com.example.finalproject.ui.orders.OrdersFragment;
 import com.example.finalproject.ui.payment.zalo.Api.CreateOrder;
@@ -203,18 +204,18 @@ public class ConfirmActivity extends AppCompatActivity {
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
                                     @Override
                                     public void onSuccess(String orderId) {
-                                        Intent intent = new Intent(ConfirmActivity.this, OrderSuccessActivity.class);
+                                        Intent intent = new Intent(ConfirmActivity.this, OrderFailActivity.class);
                                         startActivity(intent);
                                         finish();
-                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
-                                            @Override
-                                            public void onSuccess(Void data) {
-                                            }
-                                            @Override
-                                            public void onFailure(String error) {
-                                                // Handle error
-                                            }
-                                        });
+//                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
+//                                            @Override
+//                                            public void onSuccess(Void data) {
+//                                            }
+//                                            @Override
+//                                            public void onFailure(String error) {
+//                                                // Handle error
+//                                            }
+//                                        });
                                     }
                                     @Override
                                     public void onFailure(String error) {
@@ -253,18 +254,18 @@ public class ConfirmActivity extends AppCompatActivity {
                                 repo.createOrder(order, new FirebaseRepository.SingleDataCallback<String>() {
                                     @Override
                                     public void onSuccess(String orderId) {
-                                        Intent intent = new Intent(ConfirmActivity.this, OrderSuccessActivity.class);
+                                        Intent intent = new Intent(ConfirmActivity.this, OrderFailActivity.class);
                                         startActivity(intent);
                                         finish();
-                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
-                                            @Override
-                                            public void onSuccess(Void data) {
-                                            }
-                                            @Override
-                                            public void onFailure(String error) {
-                                                // Handle error
-                                            }
-                                        });
+//                                        repo.clearUserCart(new FirebaseRepository.SingleDataCallback<Void>() {
+//                                            @Override
+//                                            public void onSuccess(Void data) {
+//                                            }
+//                                            @Override
+//                                            public void onFailure(String error) {
+//                                                // Handle error
+//                                            }
+//                                        });
                                     }
                                     @Override
                                     public void onFailure(String error) {
